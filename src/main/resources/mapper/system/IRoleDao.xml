@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.dao.IRoleDao">
+    <select id="queryList" resultType="com.system.entity.Role" parameterType="com.system.entity.Role">
+    select role_id roleId , name name, role_code roleCode,remark remark from role
+    where 1=1
+    <if test="null !=name and name !='' ">
+        and name like concat('%',#{name},'%')
+    </if>
+    </select>
+
+    <select id="queryCodeByUserId" resultType="string">
+       select role_code roleCode from useroletemp where user_id=#{userId}
+    </select>
+
+    <insert id="insertRole" parameterType="com.system.entity.Role">
+        insert into role(role_id,name,role_code,remark)values(#{roleId},#{name},#{roleCode},#{remark})
+    </insert>
+
+    <update id="updateRole" parameterType="com.system.entity.Role">
+        update role set name=#{name},remark=#{remark}
+        where role_id=#{roleId}
+    </update>
+
+    <select id="queryRoleByRoleId" resultType="com.system.entity.Role">
+        select role_id roleId , name name, role_code roleCode,remark remark from role
+        where role_id=#{roleId}
+    </select>
+
+    <delete id="delRole">
+        delete from role where role_id=#{roleId}
+    </delete>
+    <delete id="batchDelRole">
+        delete from role where role_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
